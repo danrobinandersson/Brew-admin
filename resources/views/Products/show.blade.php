@@ -59,7 +59,7 @@
         </tbody>
     </table>
 
-    {{-- Action Buttons --}}
+    <!-- Action Buttons -->
     <div class="flex gap-3">
         <a href="{{ route('products.edit', $product) }}" 
            class="bg-amber-500 text-white px-6 py-2 rounded font-semibold hover:bg-amber-600">
