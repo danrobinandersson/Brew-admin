@@ -1,9 +1,37 @@
-
 @extends('layouts.app')
 
 @section('content')
 <h1 class="text-3xl font-bold mb-6">Products</h1>
 
+{{-- Filter Form --}}
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+    <form method="GET" action="{{ route('products.index') }}" class="flex gap-4 items-end">
+        <div>
+            <label for="category_id" class="block text-sm font-semibold mb-2">Filter by Category</label>
+            <select id="category_id" name="category_id" class="px-4 py-2 border border-gray-300 rounded">
+                <option value="">All Categories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}"
+                        @if(request('category_id') == $category->id) selected @endif>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded font-semibold hover:bg-amber-700">
+            Filter
+        </button>
+
+        @if(request('category_id'))
+            <a href="{{ route('products.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500">
+                Clear Filter
+            </a>
+        @endif
+    </form>
+</div>
+
+{{-- Products Table --}}
 @if($products->count() > 0)
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="w-full">
@@ -19,7 +47,7 @@
                 </tr>
             </thead>
 
-            <!-- Table Body -->
+            {{-- Table Body --}}
             <tbody>
                 @foreach($products as $product)
                     <tr class="border-b border-gray-200 hover:bg-gray-50">
@@ -67,6 +95,11 @@
 @else
     <div class="bg-amber-50 border border-amber-200 rounded-lg p-6 text-center">
         <p class="text-gray-700 text-lg">📦 No products found.</p>
+        @if(request('category_id'))
+            <a href="{{ route('products.index') }}" class="text-amber-600 font-semibold hover:underline mt-2 inline-block">
+                Clear filter to see all products
+            </a>
+        @endif
     </div>
 @endif
 @endsection
