@@ -17,10 +17,18 @@ class ProductController extends Controller
             $query->where('category_id', request('category_id'));
         }
 
+        // Filter by type if selected
+        if (request('type')) {
+            $query->where('type', request('type'));
+        }
+
         $products = $query->get();
         $categories = Category::all();
 
-        return view('products.index', compact('products', 'categories'));
+        // Get all unique types from products
+        $types = Product::distinct()->pluck('type')->sort();
+
+        return view('products.index', compact('products', 'categories', 'types'));
     }
 
     public function create()

@@ -5,7 +5,7 @@
 
 {{-- Filter Form --}}
 <div class="bg-white rounded-lg shadow p-6 mb-6">
-    <form method="GET" action="{{ route('products.index') }}" class="flex gap-4 items-end">
+    <form method="GET" action="{{ route('products.index') }}" class="flex gap-4 items-end flex-wrap">
         <div>
             <label for="category_id" class="block text-sm font-semibold mb-2">Filter by Category</label>
             <select id="category_id" name="category_id" class="px-4 py-2 border border-gray-300 rounded">
@@ -19,13 +19,26 @@
             </select>
         </div>
 
+        <div>
+            <label for="type" class="block text-sm font-semibold mb-2">Filter by Type</label>
+            <select id="type" name="type" class="px-4 py-2 border border-gray-300 rounded">
+                <option value="">All Types</option>
+                @foreach($types as $type)
+                    <option value="{{ $type }}"
+                        @if(request('type') == $type) selected @endif>
+                        {{ $type }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded font-semibold hover:bg-amber-700">
             Filter
         </button>
 
-        @if(request('category_id'))
+        @if(request('category_id') || request('type'))
             <a href="{{ route('products.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500">
-                Clear Filter
+                Clear Filters
             </a>
         @endif
     </form>
@@ -35,7 +48,7 @@
 @if($products->count() > 0)
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <table class="w-full">
-            <!-- Table Header -->
+             {{-- Table Header  --}}
             <thead class="bg-gray-100 border-b border-gray-200">
                 <tr>
                     <th class="py-3 px-4 text-left font-semibold">Name</th>
