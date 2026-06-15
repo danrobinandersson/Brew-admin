@@ -32,11 +32,27 @@
             </select>
         </div>
 
+        <div>
+            <label for="price_min" class="block text-sm font-semibold mb-2">Min Price (SEK)</label>
+            <input type="number" id="price_min" name="price_min" min="0" step="0.1"
+                   value="{{ request('price_min') }}"
+                   class="px-4 py-2 border border-gray-300 rounded"
+                   placeholder="0">
+        </div>
+
+        <div>
+            <label for="price_max" class="block text-sm font-semibold mb-2">Max Price (SEK)</label>
+            <input type="number" id="price_max" name="price_max" min="0" step="0.1"
+                   value="{{ request('price_max') }}"
+                   class="px-4 py-2 border border-gray-300 rounded"
+                   placeholder="999">
+        </div>
+
         <button type="submit" class="bg-amber-600 text-white px-4 py-2 rounded font-semibold hover:bg-amber-700">
             Filter
         </button>
 
-        @if(request('category_id') || request('type'))
+        @if(request('category_id') || request('type') || request('price_min') || request('price_max'))
             <a href="{{ route('products.index') }}" class="bg-gray-400 text-white px-4 py-2 rounded font-semibold hover:bg-gray-500">
                 Clear Filters
             </a>
@@ -66,7 +82,7 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-50">
                         <td class="py-3 px-4 font-semibold">{{ $product->name }}</td>
                         <td class="py-3 px-4">{{ $product->category->name }}</td>
-                        <td class="py-3 px-4 text-amber-600 font-bold">{{ number_format($product->price, 2) }} SEK</td>
+                        <td class="py-3 px-4 font-bold">{{ number_format($product->price, 2) }} SEK</td>
                         <td class="py-3 px-4">{{ $product->type }}</td>
                         <td class="py-3 px-4">
                             <span @class([

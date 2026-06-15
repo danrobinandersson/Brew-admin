@@ -22,6 +22,15 @@ class ProductController extends Controller
             $query->where('type', request('type'));
         }
 
+        // Filter by price range if selected
+        if (request('price_min')) {
+            $query->where('price', '>=', request('price_min'));
+        }
+
+        if (request('price_max')) {
+            $query->where('price', '<=', request('price_max'));
+        }
+
         $products = $query->get();
         $categories = Category::all();
 
