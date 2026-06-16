@@ -11,12 +11,25 @@
 <body class="bg-gray-100 text-gray-900">
 
     <header class="bg-amber-800 text-white py-4 px-6">
-        <nav class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="{{ route('products.index') }}" class="text-xl font-bold">☕ BrewAdmin</a>
+<nav class="max-w-6xl mx-auto flex justify-between items-center">
+    <a href="{{ route('products.index') }}" class="text-xl font-bold">☕ BrewAdmin</a>
+
+    @auth
+        <div class="flex gap-3">
             <a href="{{ route('products.create') }}" class="bg-white text-amber-800 px-4 py-2 rounded font-semibold hover:bg-amber-100">
                 + Add Product
             </a>
-        </nav>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-amber-900 text-white px-4 py-2 rounded font-semibold hover:bg-amber-950">
+                    Logout
+                </button>
+            </form>
+        </div>
+    @endauth
+</nav>
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-8">
