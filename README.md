@@ -4,11 +4,13 @@ A Laravel web application for managing a coffee shop's product inventory. BrewAd
 
 ## Features
 
+- **Login Required** - The system is protected by a simple authentication gate (see test credentials below)
 - **Full CRUD Operations** - Create, read, update, and delete products
 - **Advanced Filtering** - Filter products by:
     - Category (Coffee, Tea, etc.)
     - Type (Espresso, French Press, etc.)
     - Price Range (Min/Max SEK)
+
 - **Product Management** - View detailed product information including:
     - Name, description, price
     - Origin, type, weight
@@ -19,10 +21,10 @@ A Laravel web application for managing a coffee shop's product inventory. BrewAd
 
 ## Requirements
 
-- PHP
-- Laravel
-- MySQL/SQLite
-- Node.js & npm (for Tailwind CSS)
+- PHP 8.2+
+- Composer
+- MySQL (running locally)
+- Node.js & npm (for Tailwind CSS / Vite)
 
 ## Installation
 
@@ -49,85 +51,71 @@ php artisan key:generate
 
 ### 4. Database Setup
 
+Create a MySQL database first:
+
 ```bash
-php artisan migrate
-php artisan db:seed
+mysql -u root -p
 ```
 
-### 5. Build Assets
+```sql
+CREATE DATABASE brewadmin;
+exit;
+```
+
+Then open `.env` and set your database credentials:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=brewadmin
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+> **Note:** If you get a "Connection refused" error, try changing `DB_HOST` to `localhost` instead of `127.0.0.1` — this is a common issue on Mac with Homebrew MySQL, which sometimes runs on a socket rather than TCP port 3306.
+
+Run migrations and seed the database:
+
+```bash
+php artisan migrate --seed
+```
+
+### 5. Create a Login User
+
+The app requires login. Create a test user via Tinker:
+
+```bash
+php artisan tinker
+```
+
+```php
+App\Models\User::create(['name' => 'Admin', 'email' => 'admin@test.com', 'password' => bcrypt('password')]);
+exit
+```
+
+**Test login credentials:**
+
+- Email: `admin@test.com`
+- Password: `password`
+
+### 6. Build Assets
 
 ```bash
 npm run dev
 ```
 
-### 6. Start Development Server
+Keep this running in a separate terminal tab while using the app — it compiles Tailwind CSS on the fly.
+
+### 7. Start Development Server
+
+In another terminal tab:
 
 ```bash
 php artisan serve
 ```
 
-Visit `http://localhost:8000` in your browser.
-
-## Usage
-
-### View Products
-
-Navigate to `/products` to see all products in a table format.
-
-### Create a Product
-
-1. Click the "Create New Product" button
-2. Fill in all required fields
-3. Click "Save Product"
-
-### Filter Products
-
-Use the filter form to narrow down products by:
-
-- **Category** - Select from dropdown
-- **Type** - Select from dropdown
-- **Price Range** - Enter min and/or max price
-
-Combine multiple filters for precise results!
-
-### Edit a Product
-
-1. Click "View" on a product
-2. Click "Edit Product"
-3. Update fields and save
-
-### Delete a Product
-
-1. Click "Delete" button (on list or detail page)
-2. Confirm deletion
-
-## Project Structure 📁
-
-```
-brewadmin/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/ProductController.php
-│   │   └── Requests/ProductRequest.php
-│   └── Models/
-│       ├── Product.php
-│       └── Category.php
-├── database/
-│   ├── migrations/
-│   ├── seeders/
-│   └── factories/
-├── resources/
-│   ├── css/app.css
-│   └── views/
-│       ├── layouts/app.blade.php
-│       └── products/
-│           ├── index.blade.php
-│           ├── create.blade.php
-│           ├── edit.blade.php
-│           ├── show.blade.php
-│           └── form.blade.php
-└── routes/web.php
-```
+Visit `http://localhost:8000` in your browser. You'll be redirected to the login page.
 
 ## Database Schema
 
@@ -148,39 +136,29 @@ brewadmin/
 - `id` - Primary key
 - `name` - Category name (Coffee, Tea, etc.)
 
-## Technologies Used
+## Git Workflow
 
-- Laravel - PHP web framework
-- Blade - Template engine
-- Tailwind CSS - Utility-first CSS framework
-- MySQL - Database
-- Vite - Build tool for assets
-
-## Git Workflow 📊
-
-This project uses **GitHub Flow**:
+This project uses **Gitflow**:
 
 - `main` - Production-ready code
 - `develop` - Development branch
-- `feature/*` - Feature branches (e.g., `feature/product-crud`)
+- `feature/*` - Feature branches (e.g., `feature/product-crud`, `feature/simple-auth`)
 
 ## Future Enhancements
 
-- [ ] User authentication & authorization
-- [ ] Pagination for large product lists
+- [ ] User registration (currently single test user only)
 - [ ] Export products to CSV/PDF
 - [ ] Product images/gallery
-- [ ] Order management system
-- [ ] Advanced reporting
+- [ ] Sorting by price, ascending or decending
 
 ## License
 
-This project is created for educational purposes as part of a Laravel course assignment.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
 
 Created by: Robin Andersson
-Course: WU25 - Web Development  
+Course: WU25 - Web Development
 School: Yrgo
 
 ---
